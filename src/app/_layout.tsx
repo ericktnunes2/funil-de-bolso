@@ -1,18 +1,26 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useColorScheme } from 'react-native';
+import { Stack } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 
-import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import AppTabs from '@/components/app-tabs';
+import { Colors } from '@/constants/theme';
+import { LeadsProvider } from '@/context/LeadsContext';
 
-SplashScreen.preventAutoHideAsync();
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+export default function RootLayout() {
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <AnimatedSplashOverlay />
-      <AppTabs />
-    </ThemeProvider>
+    <LeadsProvider>
+      <StatusBar style="dark" />
+      <Stack
+        screenOptions={{
+          headerTintColor: Colors.primaryDark,
+          headerTitleAlign: 'center',
+          headerTitleStyle: { color: Colors.text, fontWeight: '700', fontSize: 18 },
+          headerShadowVisible: false,
+          headerStyle: { backgroundColor: Colors.background },
+          contentStyle: { backgroundColor: Colors.background },
+        }}>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="novo-lead" options={{ presentation: 'modal', title: 'Novo lead' }} />
+        <Stack.Screen name="lead/[id]" options={{ title: 'Detalhe do lead', headerBackTitle: 'Voltar' }} />
+      </Stack>
+    </LeadsProvider>
   );
 }
